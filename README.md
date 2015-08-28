@@ -2,7 +2,8 @@
 ---------
 
 1、**意图工具类<a href="https://github.com/iloveaman/Utils/blob/master/src/utils/utilsIntentHelper.java">IntentHelper.java</a>**
-	<br> <tr>   根据文件名选择意图调用系统相应应用程序打开文件。</tr>
+	<br>	  根据文件名选择意图调用系统相应应用程序打开文件。
+
 ```
 	IntentHelper.openFile(Activity mContext, File file);
 ```
