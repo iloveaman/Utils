@@ -490,7 +490,7 @@ public class FileUtils {
                 .mkdirs();
     }
 
-    /**生成目录（文件夹），@see  #makeDirs(String)
+    /**鐢熸垚鐩綍锛堟枃浠跺す锛夛紝@see  #makeDirs(String)
      *
      * @param folderPath
      * @return
@@ -598,13 +598,13 @@ public class FileUtils {
 
     // ---------------------------------------------------------------------------
     /**
-     * 判断SD是否插入
+     * 鍒ゆ柇SD鏄惁鎻掑叆
      *
      * @return
      */
     public String getSDPath() {
         String SDdir = "";
-        // 获取SD卡上是否有可读写权限
+        // 鑾峰彇SD鍗′笂鏄惁鏈夊彲璇诲啓鏉冮檺
         boolean sdCardExist = Environment.getExternalStorageState().equals(
                 android.os.Environment.MEDIA_MOUNTED);
         if (sdCardExist) {
@@ -623,5 +623,39 @@ public class FileUtils {
         public void onSuccess(File file) ;
         public void onError(Exception exception);
         public void onFailed();
+    }
+    
+    //-------------------------------------------------------------
+
+	/**
+     * 灏咺nputStream璇诲埌byte[]
+     *
+     * @return  
+     */
+	 public static byte[] readStream(InputStream inStream) throws Exception {
+        byte[] buffer = new byte[1024];
+        int len = -1;
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        while ((len = inStream.read(buffer)) != -1) {
+            outStream.write(buffer, 0, len);
+        }
+        byte[] data = outStream.toByteArray();
+        outStream.close();
+        inStream.close();
+        return data;
+    }
+
+	/**
+     * 灏哹yte[]杞崲鎴怋itmap
+     *
+     * @return  
+     */
+	public static Bitmap getPicFromBytes(byte[] bytes, BitmapFactory.Options opts) {
+        if (bytes != null)
+            if (opts != null)
+                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+            else
+                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return null;
     }
 }
