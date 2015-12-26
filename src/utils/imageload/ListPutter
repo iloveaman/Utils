@@ -1,0 +1,25 @@
+package com.ruanko.marketresource.tv.parent.util.diskcache2;
+
+import android.text.TextUtils;
+
+import com.ruanko.marketresource.tv.parent.util.ListUtil;
+
+import java.util.List;
+
+/**
+ *往List中存入图片地址url,已存在的不存入
+ * Created by admin on 2015/12/22.
+ */
+public class ListPutter {
+    public static void put(String url, List<String> urls) {
+        if (TextUtils.isEmpty(url) || ListUtil.isEmpty(urls)) {
+            return;
+        }
+        for (String item : urls) {
+            if (!item.equals(url)) {
+                urls.add(url);
+            }
+        }
+    }
+
+}
