@@ -1,0 +1,189 @@
+package com.ruanko.marketresource.tv.parent.util.diskcache2;
+
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.ImageView;
+
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.ruanko.jiaxiaotong.tv.parent.R;
+import com.ruanko.marketresource.tv.parent.base.MyApplication;
+import com.ruanko.marketresource.tv.parent.util.TextUtil;
+import com.ruanko.marketresource.tv.parent.view.ScaleImageView;
+
+import java.util.List;
+
+/**
+ * Created by admin on 2015/12/22.
+ */
+public class ImageCacheManager {
+    private static String TAG = ImageCacheManager.class.getSimpleName();
+
+    // 获取图片缓存类对象
+    private static ImageLoader.ImageCache mImageCache = new ImageCacheUtil();
+    // 获取ImageLoader对象
+    public static ImageLoader mImageLoader = new ImageLoader(VolleyRequestQueueManager.mRequestQueue, mImageCache);
+
+    /**
+     * @param urls
+     */
+    public static void clearCaches(List<String> urls) {
+        if (urls == null || urls.size() == 0) {
+            return;
+        }
+        for (String key : urls) {
+            Bitmap bitmapCache = ((ImageCacheUtil) mImageCache).getBitmapFromMemCache(key);
+            if (bitmapCache != null && !bitmapCache.isRecycled()) {
+                bitmapCache.recycle();
+                bitmapCache = null;
+            }
+        }
+    }
+
+    public static void clearCaches(String url) {
+        if (TextUtil.isEmpty(url)) {
+            return;
+        }
+        Bitmap bitmapCache = ((ImageCacheUtil) mImageCache).getBitmapFromMemCache(url);
+        if (bitmapCache != null && !bitmapCache.isRecycled()) {
+            bitmapCache.recycle();
+            bitmapCache = null;
+        }
+    }
+
+    /**
+     * 获取ImageListener
+     *
+     * @param view
+     * @param defaultImage
+     * @param errorImage
+     * @return
+     */
+    private static ImageLoader.ImageListener getImageListener(final ImageView view, final Bitmap defaultImage, final Bitmap errorImage) {
+
+        return new ImageLoader.ImageListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // 回调失败
+                if (errorImage != null) {
+                    view.setImageBitmap(errorImage);
+                }
+            }
+
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                // 回调成功
+                if (response.getBitmap() != null) {
+                    view.setImageBitmap(response.getBitmap());
+                } else if (defaultImage != null) {
+                    view.setImageBitmap(defaultImage);
+                }
+            }
+        };
+
+    }
+
+    private static ImageLoader.ImageListener getImageListener(final ImageView view, final Bitmap defaultImage, final Bitmap errorImage, final int maxWidth) {
+
+        return new ImageLoader.ImageListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // 回调失败
+                if (errorImage != null) {
+                    view.setImageBitmap(errorImage);
+                }
+            }
+
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                // 回调成功
+                if (response.getBitmap() != null) {
+                    Bitmap bitmap = response.getBitmap();
+                    if (view instanceof ScaleImageView) {
+                        int maxHeight = (bitmap.getHeight() * maxWidth) / bitmap.getWidth();
+                        /*if (view.getScaleType() == ImageView.ScaleType.FIT_XY) {
+
+                        }*/
+                        ScaleImageView target = (ScaleImageView) view;
+                        target.setImageWidth(maxWidth);
+                        target.setImageHeight(maxHeight);
+                    }
+                    view.setImageBitmap(bitmap);
+                } else if (defaultImage != null) {
+                    view.setImageBitmap(defaultImage);
+                }
+            }
+        };
+
+    }
+
+    /**
+     * 提供给外部调用方法
+     *
+     * @param url
+     * @param view
+     * @param defaultImage
+     * @param errorImage
+     */
+    public static void loadImage(String url, ImageView view, Bitmap defaultImage, Bitmap errorImage) {
+        if (TextUtil.isEmpty(url)) {
+            return;
+        }
+        mImageLoader.get(url, ImageCacheManager.getImageListener(view, defaultImage, errorImage), 0, 0);
+    }
+
+    public static void loadImage(String url, ImageView view, int defaultImage, int errorImage) {
+        if (TextUtil.isEmpty(url)) {
+            return;
+        }
+        mImageLoader.get(url, ImageCacheManager.getImageListener(view, getBitmapFromRes(defaultImage), getBitmapFromRes(errorImage)), 0, 0);
+    }
+
+    /**
+     * 提供给外部调用方法
+     *
+     * @param url
+     * @param view
+     * @param defaultImage
+     * @param errorImage
+     */
+    public static void loadImage(String url, ImageView view, Bitmap defaultImage, Bitmap errorImage, int maxWidth, int maxHeight) {
+        if (TextUtil.isEmpty(url)) {
+            return;
+        }
+        mImageLoader.get(url, ImageCacheManager.getImageListener(view, defaultImage, errorImage, maxWidth), maxWidth, maxHeight);
+    }
+
+
+    public static void loadImage(String url, ImageView view, int defaultImage, int errorImage, int maxWidth, int maxHeight) {
+        if (TextUtil.isEmpty(url)) {
+            return;
+        }
+        mImageLoader.get(url, ImageCacheManager.getImageListener(view, getBitmapFromRes(defaultImage), getBitmapFromRes(errorImage), maxWidth), maxWidth, maxHeight);
+    }
+
+
+    public static void loadImage(String url, /*int maxWidth, int maxHeight,*/ ImageLoader.ImageListener listener) {
+        if (TextUtil.isEmpty(url)) {
+            return;
+        }
+        mImageLoader.get(url, listener/*, maxWidth, maxHeight*/);
+    }
+
+
+    private static Bitmap getBitmapFromRes(int resId) {
+        Resources res = MyApplication.getInstance().getResources();
+        String key = res.getResourceName(resId == 0 ? R.drawable.default_image2 : resId) + resId;
+        Bitmap bitmapCache = ((ImageCacheUtil) mImageCache).getBitmapFromMemCache(key);
+        if (bitmapCache == null) {
+            bitmapCache = BitmapFactory.decodeResource(res, resId);
+            ((ImageCacheUtil) mImageCache).addBitmapToMemoryCache(key, bitmapCache);
+        }
+        return bitmapCache;
+
+    }
+
+}
