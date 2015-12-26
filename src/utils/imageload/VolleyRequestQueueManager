@@ -1,0 +1,27 @@
+package com.ruanko.marketresource.tv.parent.util.diskcache2;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.ruanko.marketresource.tv.parent.base.MyApplication;
+
+/**
+ * Created by admin on 2015/12/22.
+ */
+public class VolleyRequestQueueManager {
+    // 获取请求队列类
+    public static RequestQueue mRequestQueue = Volley.newRequestQueue(MyApplication.getInstance());
+
+    //添加任务进任务队列
+    public static void addRequest(Request<?> request, Object tag) {
+        if (tag != null) {
+            request.setTag(tag);
+        }
+        mRequestQueue.add(request);
+    }
+
+    //取消任务
+    public static void cancelRequest(Object tag) {
+        mRequestQueue.cancelAll(tag);
+    }
+}
