@@ -1,10 +1,11 @@
-#demo:
+#Demo:
 
 ```
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MineWebView mWv = new MineWebView(this);
+        mWv.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mWv.loadUrl("http://pedant.cn/self/cross-assets.html");
         setContentView(mWv);
     }
