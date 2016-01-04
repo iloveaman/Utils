@@ -15,3 +15,5 @@
 
 4、**解绑View工具类<a href="https://github.com/iloveaman/Utils/blob/master/src/utils/ViewUtils.java">ViewUtils.java</a>**
 	<br>    解绑view,释放内存
+5、**<a href="https://github.com/iloveaman/Utils/tree/master/src/utils/Http">http和webview</a>**
+ 
