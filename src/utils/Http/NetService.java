@@ -8,7 +8,7 @@
  * Copyright: Copyright (c) 2013
  */
 package cn.pedant.SafeWebViewBridge.util;
-
+ 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.protocol.HTTP;
