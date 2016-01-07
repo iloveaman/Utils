@@ -13,6 +13,7 @@
 		IntentHelper.isIntentAvailable(this, Intent.ACTION_VIEW);
 	```
  3. 检查某个Intent是否可用(queryIntentActivities)
+	
 	```	
 		IntentHelper.isIntentAvailable(this, Intent.ACTION_VIEW, "video/*")
 	```
