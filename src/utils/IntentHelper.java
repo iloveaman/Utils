@@ -148,5 +148,42 @@ public class IntentHelper {
             {".zip", "application/x-zip-compressed"},
             {"", "*/*"}
     };
+ /**
+     * 检测一个intent是否存在.
+     *
+     * @param context
+     * @param action
+     * @return
+     */
+    public static boolean isIntentAvailable(Context context, String action) {
+        final PackageManager packageManager = context.getPackageManager();
+        final Intent intent = new Intent(action);
+        List<ResolveInfo> resolveInfo =
+                packageManager.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        if (resolveInfo.size() > 0) {
+            return true;
+        }
+        return false;
+    }
 
+    /**
+     * 检测一个intent是否存在.
+     *
+     * @param context
+     * @param action
+     * @return
+     */
+    public static boolean isIntentAvailable(Context context, String action, String dateType) {
+        final PackageManager packageManager = context.getPackageManager();
+        final Intent intent = new Intent(action);
+        intent.setType("video/*");
+        List<ResolveInfo> resolveInfo =
+                packageManager.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        if (resolveInfo.size() > 0) {
+            return true;
+        }
+        return false;
+    }
 }
