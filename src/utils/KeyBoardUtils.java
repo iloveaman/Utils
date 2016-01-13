@@ -55,4 +55,18 @@ public class KeyBoardUtils {
         mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN;
     }
+    
+    
+     public static void hideKeybord(Activity mContext) {
+        //WindowManager.LayoutParams params = mContext.getWindow().getAttributes();
+        // 隐藏软键盘
+        //mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        //params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN;
+        if (mContext.getCurrentFocus() != null) {
+            ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(mContext.getCurrentFocus()
+                                    .getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
 }
