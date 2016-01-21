@@ -13,6 +13,7 @@ public class NumberUtil {
 	static String[] chineseNum = { "零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌",
 			"玖" };// 中文数字
 	static String unit[] = new String[] { "", "拾", "佰", "仟", "万", "拾", "佰",
+			"仟", "亿" , "拾", "佰", "仟", "万", "拾", "佰",
 			"仟", "亿" };// 每位上面的单位
 	static String moneyUnit = "元";
 
